@@ -1,0 +1,43 @@
+name: Security Vulnerability Alerter
+
+on:
+  schedule:
+    # Läuft automatisch alle 15 Minuten rund um die Uhr
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Erlaubt manuelles Starten per Klick im "Actions"-Tab
+
+jobs:
+  check-vulns:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests feedparser
+
+      - name: Bekannte Lücken aus dem Cache laden
+        uses: actions/cache/restore@v4
+        with:
+          path: seen_vulns.json
+          key: seen-vulns-state-
+          restore-keys: |
+            seen-vulns-state-
+
+      - name: Security-Check ausführen
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python alerter.py
+
+      - name: Aktualisierten Stand im Cache speichern
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: seen_vulns.json
+          key: seen-vulns-state-${{ github.run_id }}
