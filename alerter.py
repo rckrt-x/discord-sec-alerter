@@ -12,9 +12,26 @@ STATE_FILE = "seen_vulns.json"
 
 # Optional: Deine Watchlist für High-Severity Lücken (Critical >= 9.0 wird IMMER gemeldet)
 WATCHLIST_KEYWORDS = [
-    "php", "debian", "ubuntu", "linux", "kernel", "nginx", "mariadb", 
-    "proxmox", "docker", "synology", "ubiquiti", "unifi", "fritz!box", 
-    "airwatch", "workspace one", "ios", "wordpress", "mailcow", "openssh"
+    # Webstack & Datenbanken
+    "php", "nginx", "mariadb", "mysql", "wordpress", "bricks", "metabox",
+    
+    # Server, OS & Container
+    "debian", "ubuntu", "linux kernel", "proxmox", "pve", "qemu", "kvm",
+    "docker", "containerd", "runc", "mailcow", "postfix", "dovecot",
+    
+    # Kritische System-Bibliotheken (oft Ziel großer Zero-Days)
+    "openssh", "openssl", "glibc", "systemd", "sudo", "curl", "liblzma",
+    
+    # Netzwerk, Storage & MDM
+    "ubiquiti", "unifi", "edgeos", "fritz!box", "fritz!os", "avm",
+    "synology", "dsm", "airwatch", "workspace one", "apple ios", "ipados", 
+    "cisco", "nextcloud"
+    
+    # Self-Hosted AI (falls öffentlich erreichbar oder im lokalen Netz relevant)
+    "ollama", "anythingllm", "dify",
+
+    # Microsoft
+    "windows", "microsoft", "office", "m365"
 ]
 MIN_CVSS_GLOBAL = 9.0
 
